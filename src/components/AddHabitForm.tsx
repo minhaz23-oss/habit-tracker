@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 
 interface AddHabitFormProps {
   onAddHabit: (name: string) => void;
@@ -6,6 +8,17 @@ interface AddHabitFormProps {
 
 export const AddHabitForm: React.FC<AddHabitFormProps> = ({ onAddHabit }) => {
   const [habitName, setHabitName] = useState('');
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useGSAP(() => {
+    gsap.from(formRef.current, {
+      y: 20,
+      opacity: 0,
+      duration: 0.6,
+      ease: 'power2.out',
+      delay: 0.4 // Delay slightly to play after header
+    });
+  }, { scope: formRef });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,7 +29,7 @@ export const AddHabitForm: React.FC<AddHabitFormProps> = ({ onAddHabit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-2xl mx-auto mb-12">
+    <form ref={formRef} onSubmit={handleSubmit} className="max-w-2xl mx-auto mb-12">
       <div className="relative group">
         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
           <svg className="h-5 w-5 text-gray-400 dark:text-gray-500 group-focus-within:text-gray-600 dark:group-focus-within:text-gray-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -35,7 +48,7 @@ export const AddHabitForm: React.FC<AddHabitFormProps> = ({ onAddHabit }) => {
           <button
             type="submit"
             disabled={!habitName.trim()}
-            className="px-4 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-sm font-medium rounded-xl hover:bg-gray-800 dark:hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            className="px-4 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-sm font-medium rounded-xl hover:bg-gray-800 dark:hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer"
           >
             Add Habit
           </button>
