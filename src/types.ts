@@ -4,9 +4,12 @@ export interface Habit {
   createdAt: string;
 }
 
+export type CompletionStatus = 'completed' | 'failed';
+
 export interface HabitCompletion {
   habitId: string;
   date: string; // Format: YYYY-MM-DD
+  status: CompletionStatus;
 }
 
 export interface HabitData {

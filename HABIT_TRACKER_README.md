@@ -16,7 +16,11 @@ A clean, minimal habit tracker web application built with React, TypeScript, and
 - Habits persist across sessions
 
 ✅ **Daily Tracking**
-- Click checkboxes to mark habits as complete
+- Three-state system for each day: Empty → Completed (✓) → Failed (✗) → Empty
+- Click to cycle through states:
+  - **Empty**: Not tracked yet (white box)
+  - **Completed**: Successfully completed habit (green with checkmark)
+  - **Failed**: Failed to complete habit (red with X)
 - Data saves automatically to localStorage
 - View and edit any day of the month
 
@@ -82,8 +86,11 @@ npm run preview
 ## Usage
 
 1. **Add Habits**: Enter a habit name in the input field and click "Add Habit"
-2. **Track Daily**: Check off completed habits for each day
-3. **View Progress**: See your statistics and progress chart at the top
+2. **Track Daily**: Click each day box to cycle through states:
+   - First click: Mark as completed (green checkmark)
+   - Second click: Mark as failed (red X)
+   - Third click: Clear/reset to empty
+3. **View Progress**: See your statistics and progress chart (only completed habits count)
 4. **Navigate Months**: Use Previous/Next buttons to view different months
 5. **Delete Habits**: Click the × button next to a habit to remove it
 

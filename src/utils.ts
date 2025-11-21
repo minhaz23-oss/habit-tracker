@@ -8,12 +8,13 @@ export const getDaysInMonth = (year: number, month: number): number => {
   return new Date(year, month + 1, 0).getDate();
 };
 
-export const isHabitCompleted = (
+export const getHabitStatus = (
   habitId: string,
   date: string,
   completions: HabitCompletion[]
-): boolean => {
-  return completions.some(c => c.habitId === habitId && c.date === date);
+): 'none' | 'completed' | 'failed' => {
+  const completion = completions.find(c => c.habitId === habitId && c.date === date);
+  return completion ? completion.status : 'none';
 };
 
 export const calculateDayStats = (
@@ -25,7 +26,7 @@ export const calculateDayStats = (
 ): DayStats => {
   const dateStr = formatDate(year, month, day);
   const completedCount = habits.filter(h => 
-    isHabitCompleted(h.id, dateStr, completions)
+    getHabitStatus(h.id, dateStr, completions) === 'completed'
   ).length;
   const totalHabits = habits.length;
   const percentage = totalHabits > 0 ? (completedCount / totalHabits) * 100 : 0;
