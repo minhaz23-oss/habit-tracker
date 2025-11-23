@@ -217,49 +217,115 @@ export const HabitGrid: React.FC<HabitGridProps> = ({
   }
 
   return (
-    <div ref={containerRef} className="space-y-8">
-      {habits.map((habit) => (
-        <div key={habit.id} className="habit-card group relative bg-white/40 dark:bg-gray-800/40 backdrop-blur-md rounded-2xl border border-white/20 dark:border-gray-700/30 p-4 md:p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.01] hover:bg-white/50 dark:hover:bg-gray-800/50">
-          {/* Habit header with name and delete button */}
-          <div className="flex items-center justify-between mb-4 md:mb-6">
-            <h3 className="font-heading font-semibold text-gray-900 dark:text-white text-lg md:text-xl tracking-tight">{habit.name}</h3>
-            <button
-              onClick={() => onDeleteHabit(habit.id)}
-              className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-all opacity-0 group-hover:opacity-100"
-              title="Delete habit"
+    <>
+      {/* Mobile: Horizontal Slider */}
+      <div className="md:hidden">
+        <div
+          ref={containerRef}
+          className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
+          {habits.map((habit) => (
+            <div
+              key={habit.id}
+              className="habit-card group relative bg-white/40 dark:bg-gray-800/40 backdrop-blur-md rounded-2xl border border-white/20 dark:border-gray-700/30 p-4 shadow-lg transition-all duration-300 min-w-[85vw] snap-center flex-shrink-0"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
+              {/* Habit header with name and delete button */}
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-heading font-semibold text-gray-900 dark:text-white text-lg tracking-tight">{habit.name}</h3>
+                <button
+                  onClick={() => onDeleteHabit(habit.id)}
+                  className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-all"
+                  title="Delete habit"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
 
-          {/* Days grid - wrapping */}
-          <div className="grid grid-cols-7 sm:grid-cols-10 md:grid-cols-15 lg:grid-cols-[repeat(auto-fill,minmax(2.5rem,1fr))] gap-2 md:gap-3">
-            {days.map(day => {
-              const dateStr = formatDate(year, month, day);
-              const status = getHabitStatus(habit.id, dateStr, completions);
-              const isToday = day === currentDay;
-              const isActive = activePopup?.habitId === habit.id && activePopup?.date === dateStr;
+              {/* Days grid */}
+              <div className="grid grid-cols-7 gap-2">
+                {days.map(day => {
+                  const dateStr = formatDate(year, month, day);
+                  const status = getHabitStatus(habit.id, dateStr, completions);
+                  const isToday = day === currentDay;
+                  const isActive = activePopup?.habitId === habit.id && activePopup?.date === dateStr;
 
-              return (
-                <HabitCell
-                  key={day}
-                  habitId={habit.id}
-                  dateStr={dateStr}
-                  day={day}
-                  status={status}
-                  isToday={isToday}
-                  isActive={isActive}
-                  onCellClick={handleCellClick}
-                  onPopupAction={handlePopupAction}
-                  setPopupRef={(el) => { popupRef.current = el; }}
-                />
-              );
-            })}
-          </div>
+                  return (
+                    <HabitCell
+                      key={day}
+                      habitId={habit.id}
+                      dateStr={dateStr}
+                      day={day}
+                      status={status}
+                      isToday={isToday}
+                      isActive={isActive}
+                      onCellClick={handleCellClick}
+                      onPopupAction={handlePopupAction}
+                      setPopupRef={(el) => { popupRef.current = el; }}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
+        {/* Scroll indicator dots */}
+        {habits.length > 1 && (
+          <div className="flex justify-center gap-2 mt-4">
+            {habits.map((_, index) => (
+              <div key={index} className="w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-600" />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Desktop: Vertical Stack */}
+      <div className="hidden md:block space-y-8">
+        {habits.map((habit) => (
+          <div key={habit.id} className="habit-card group relative bg-white/40 dark:bg-gray-800/40 backdrop-blur-md rounded-2xl border border-white/20 dark:border-gray-700/30 p-4 md:p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.01] hover:bg-white/50 dark:hover:bg-gray-800/50">
+            {/* Habit header with name and delete button */}
+            <div className="flex items-center justify-between mb-4 md:mb-6">
+              <h3 className="font-heading font-semibold text-gray-900 dark:text-white text-lg md:text-xl tracking-tight">{habit.name}</h3>
+              <button
+                onClick={() => onDeleteHabit(habit.id)}
+                className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-all opacity-0 group-hover:opacity-100"
+                title="Delete habit"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Days grid - wrapping */}
+            <div className="grid grid-cols-7 sm:grid-cols-10 md:grid-cols-15 lg:grid-cols-[repeat(auto-fill,minmax(2.5rem,1fr))] gap-2 md:gap-3">
+              {days.map(day => {
+                const dateStr = formatDate(year, month, day);
+                const status = getHabitStatus(habit.id, dateStr, completions);
+                const isToday = day === currentDay;
+                const isActive = activePopup?.habitId === habit.id && activePopup?.date === dateStr;
+
+                return (
+                  <HabitCell
+                    key={day}
+                    habitId={habit.id}
+                    dateStr={dateStr}
+                    day={day}
+                    status={status}
+                    isToday={isToday}
+                    isActive={isActive}
+                    onCellClick={handleCellClick}
+                    onPopupAction={handlePopupAction}
+                    setPopupRef={(el) => { popupRef.current = el; }}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
   );
 };
