@@ -219,13 +219,13 @@ export const HabitGrid: React.FC<HabitGridProps> = ({
   return (
     <div ref={containerRef} className="space-y-8">
       {habits.map((habit) => (
-        <div key={habit.id} className="habit-card group relative bg-white dark:bg-gray-800 rounded-2xl border border-gray-300 dark:border-gray-700 p-6 shadow-sm transition-all hover:shadow-md hover:border-gray-400 dark:hover:border-gray-600">
+        <div key={habit.id} className="habit-card group relative bg-white/40 dark:bg-gray-800/40 backdrop-blur-md rounded-2xl border border-white/20 dark:border-gray-700/30 p-4 md:p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.01] hover:bg-white/50 dark:hover:bg-gray-800/50">
           {/* Habit header with name and delete button */}
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="font-semibold text-gray-900 dark:text-white text-xl tracking-tight">{habit.name}</h3>
+          <div className="flex items-center justify-between mb-4 md:mb-6">
+            <h3 className="font-heading font-semibold text-gray-900 dark:text-white text-lg md:text-xl tracking-tight">{habit.name}</h3>
             <button
               onClick={() => onDeleteHabit(habit.id)}
-              className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-all"
+              className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-all opacity-0 group-hover:opacity-100"
               title="Delete habit"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -235,7 +235,7 @@ export const HabitGrid: React.FC<HabitGridProps> = ({
           </div>
 
           {/* Days grid - wrapping */}
-          <div className="grid grid-cols-7 sm:grid-cols-10 md:grid-cols-15 lg:grid-cols-[repeat(auto-fill,minmax(2.5rem,1fr))] gap-3">
+          <div className="grid grid-cols-7 sm:grid-cols-10 md:grid-cols-15 lg:grid-cols-[repeat(auto-fill,minmax(2.5rem,1fr))] gap-2 md:gap-3">
             {days.map(day => {
               const dateStr = formatDate(year, month, day);
               const status = getHabitStatus(habit.id, dateStr, completions);

@@ -41,14 +41,14 @@ export const AddHabitForm: React.FC<AddHabitFormProps> = ({ onAddHabit }) => {
           value={habitName}
           onChange={(e) => setHabitName(e.target.value)}
           placeholder="Add a new habit..."
-          className="block w-full pl-11 pr-32 py-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-2xl text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-gray-900 dark:focus:ring-gray-100 focus:border-transparent sm:text-sm sm:leading-6 shadow-sm transition-all"
+          className="block w-full pl-11 pr-28 md:pr-32 py-3 md:py-4 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-white/20 dark:border-gray-700/30 rounded-2xl text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-500/50 dark:focus:ring-blue-400/50 focus:border-transparent text-sm md:text-base shadow-lg transition-all font-sans"
           maxLength={50}
         />
         <div className="absolute inset-y-0 right-0 flex py-2 pr-2">
           <button
             type="submit"
             disabled={!habitName.trim()}
-            className="px-4 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-sm font-medium rounded-xl hover:bg-gray-800 dark:hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer"
+            className="px-3 md:px-4 py-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs md:text-sm font-medium rounded-xl hover:shadow-lg hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer font-heading tracking-wide"
           >
             Add Habit
           </button>

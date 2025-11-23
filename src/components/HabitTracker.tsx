@@ -21,6 +21,7 @@ export const HabitTracker: React.FC = () => {
     }
     return false;
   });
+  const [showStats, setShowStats] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
@@ -196,35 +197,21 @@ export const HabitTracker: React.FC = () => {
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-slate-100 via-gray-50 to-blue-50 dark:from-gray-950 dark:via-slate-900 dark:to-gray-900" />
 
-        {/* Parallax Images */}
-        <div className="parallax-bg absolute inset-0 w-full h-full z-0">
-          <img
-            src="/bg-image1.png"
-            alt=""
-            className="absolute top-[5%] left-[5%] w-[200px] h-[200px] object-cover opacity-90 dark:opacity-70 shadow-2xl"
-            data-speed="0.02"
-          />
-          <img
-            src="/bg-image2.png"
-            alt=""
-            className="absolute top-[5%] right-[5%] w-[200px] h-[200px] object-cover opacity-90 dark:opacity-70 shadow-2xl"
-            data-speed="0.03"
-          />
-        </div>
+
 
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-400/20 dark:bg-blue-600/10 blur-[100px]" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-purple-400/20 dark:bg-purple-600/10 blur-[100px]" />
         <div className="absolute top-[40%] left-[40%] w-[30%] h-[30%] rounded-full bg-orange-300/20 dark:bg-orange-600/5 blur-[100px]" />
       </div>
 
-      <div className="max-w-5xl mx-auto space-y-12 relative z-10">
+      <div className="max-w-5xl mx-auto space-y-12 relative z-10 px-4 md:px-6">
         {/* Header */}
-        <div ref={headerRef} className="relative text-center space-y-4">
-          <div className="absolute right-0 top-0">
+        <div ref={headerRef} className="relative text-center space-y-4 py-6 px-4 md:py-8 md:px-6 rounded-3xl bg-white/30 dark:bg-black/30 backdrop-blur-md border border-white/20 shadow-xl">
+          <div className="absolute right-4 top-4 md:right-6 md:top-8 z-10">
             <button
               ref={darkModeBtnRef}
               onClick={() => setDarkMode(!darkMode)}
-              className="p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+              className="p-2 text-gray-600 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-white/10 rounded-full transition-all duration-300 hover:scale-110"
               title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
             >
               {darkMode ? (
@@ -238,10 +225,10 @@ export const HabitTracker: React.FC = () => {
               )}
             </button>
           </div>
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent pb-1">
+          <h1 className="text-3xl md:text-5xl font-heading font-bold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent pb-2 drop-shadow-sm">
             Habit Tracker
           </h1>
-          <p className="text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+          <p className="text-base md:text-lg font-sans text-gray-600 dark:text-gray-300 max-w-2xl mx-auto font-medium">
             Build consistency and track your progress with a simple, focused interface.
           </p>
         </div>
@@ -289,7 +276,28 @@ export const HabitTracker: React.FC = () => {
         {/* Statistics */}
         {habitData.habits.length > 0 && (
           <div className="animate-entry">
-            <Statistics stats={stats} />
+            {/* Mobile: Collapsible with toggle button */}
+            <div className="md:hidden">
+              <button
+                onClick={() => setShowStats(!showStats)}
+                className="w-full mb-4 px-4 py-2 bg-white/40 dark:bg-gray-800/40 backdrop-blur-md rounded-xl border border-white/20 dark:border-gray-700/30 shadow-lg text-gray-900 dark:text-white font-medium flex items-center justify-between transition-all hover:bg-white/50 dark:hover:bg-gray-800/50"
+              >
+                <span className="font-heading">Statistics</span>
+                <svg
+                  className={`w-5 h-5 transition-transform ${showStats ? 'rotate-180' : ''}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {showStats && <Statistics stats={stats} />}
+            </div>
+            {/* Desktop: Always visible */}
+            <div className="hidden md:block">
+              <Statistics stats={stats} />
+            </div>
           </div>
         )}
 
