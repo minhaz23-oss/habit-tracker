@@ -241,7 +241,7 @@ export const HabitTracker: React.FC = () => {
           <h1 className="text-3xl md:text-5xl font-heading font-bold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent pb-2 drop-shadow-sm leading-none">
             Habit Tracker
           </h1>
-          <p className="text-base md:text-lg font-sans text-gray-600 dark:text-gray-300 max-w-2xl mx-auto font-medium">
+          <p className="text-[13px] md:text-lg font-sans text-gray-600 dark:text-gray-300 max-w-2xl mx-auto font-medium">
             Build consistency and track your progress with a simple, focused interface.
           </p>
         </div>
