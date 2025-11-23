@@ -77,7 +77,7 @@ const HabitCell: React.FC<HabitCellProps> = ({
   }, [status]);
 
   return (
-    <div className="flex flex-col items-center gap-1 relative">
+    <div className={`flex flex-col items-center gap-1 relative ${isActive ? 'z-20' : 'z-0'}`}>
       <span className={`text-xs font-medium ${isToday ? 'text-blue-600 dark:text-blue-400' : isFuture ? 'text-gray-400 dark:text-gray-500' : 'text-gray-500 dark:text-gray-400'
         }`}>
         {day}
@@ -117,29 +117,33 @@ const HabitCell: React.FC<HabitCellProps> = ({
       {isActive && (
         <div
           ref={setPopupRef}
-          className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 z-10 flex gap-1 bg-white dark:bg-gray-800 p-1.5 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 animate-in fade-in zoom-in duration-200"
+          className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 z-50 flex gap-1 bg-white dark:bg-gray-800 p-1.5 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 animate-in fade-in zoom-in duration-200"
         >
           <button
-            onClick={(e) => {
+            onPointerDown={(e) => {
+              e.preventDefault();
               e.stopPropagation();
               onPopupAction(habitId, dateStr, 'completed');
             }}
-            className="p-1.5 rounded-lg bg-emerald-100 text-emerald-600 hover:bg-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:hover:bg-emerald-900/50 transition-colors"
+            className="p-2 rounded-lg bg-emerald-100 text-emerald-600 hover:bg-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:hover:bg-emerald-900/50 transition-colors active:scale-95"
             title="Mark as Completed"
+            type="button"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
             </svg>
           </button>
           <button
-            onClick={(e) => {
+            onPointerDown={(e) => {
+              e.preventDefault();
               e.stopPropagation();
               onPopupAction(habitId, dateStr, 'failed');
             }}
-            className="p-1.5 rounded-lg bg-rose-100 text-rose-600 hover:bg-rose-200 dark:bg-rose-900/30 dark:text-rose-400 dark:hover:bg-rose-900/50 transition-colors"
+            className="p-2 rounded-lg bg-rose-100 text-rose-600 hover:bg-rose-200 dark:bg-rose-900/30 dark:text-rose-400 dark:hover:bg-rose-900/50 transition-colors active:scale-95"
             title="Mark as Failed"
+            type="button"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
@@ -185,7 +189,7 @@ export const HabitGrid: React.FC<HabitGridProps> = ({
 
   // Close popup when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
         setActivePopup(null);
       }
@@ -193,10 +197,12 @@ export const HabitGrid: React.FC<HabitGridProps> = ({
 
     if (activePopup) {
       document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
     };
   }, [activePopup]);
 
