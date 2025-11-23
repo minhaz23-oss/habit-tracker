@@ -19,6 +19,7 @@ interface HabitCellProps {
   day: number;
   status: 'none' | 'completed' | 'failed';
   isToday: boolean;
+  isFuture: boolean;
   isActive: boolean;
   onCellClick: (habitId: string, date: string, currentStatus: 'none' | 'completed' | 'failed') => void;
   onPopupAction: (habitId: string, date: string, status: 'completed' | 'failed') => void;
@@ -31,6 +32,7 @@ const HabitCell: React.FC<HabitCellProps> = ({
   day,
   status,
   isToday,
+  isFuture,
   isActive,
   onCellClick,
   onPopupAction,
@@ -76,7 +78,7 @@ const HabitCell: React.FC<HabitCellProps> = ({
 
   return (
     <div className="flex flex-col items-center gap-1 relative">
-      <span className={`text-xs font-medium ${isToday ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400'
+      <span className={`text-xs font-medium ${isToday ? 'text-blue-600 dark:text-blue-400' : isFuture ? 'text-gray-400 dark:text-gray-500' : 'text-gray-500 dark:text-gray-400'
         }`}>
         {day}
       </span>
@@ -84,16 +86,20 @@ const HabitCell: React.FC<HabitCellProps> = ({
       <button
         ref={buttonRef}
         onClick={(e) => {
+          if (isFuture) return;
           e.stopPropagation();
           onCellClick(habitId, dateStr, status);
         }}
-        className={`w-8 h-8 flex items-center justify-center rounded-lg border transition-colors duration-200 ${status === 'completed'
-          ? 'bg-emerald-500 border-emerald-500 text-white shadow-sm scale-100'
-          : status === 'failed'
-            ? 'bg-rose-500 border-rose-500 text-white shadow-sm scale-100'
-            : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600 text-transparent hover:scale-105'
+        disabled={isFuture}
+        className={`w-8 h-8 flex items-center justify-center rounded-lg border transition-colors duration-200 ${isFuture
+          ? 'bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700 cursor-not-allowed opacity-50'
+          : status === 'completed'
+            ? 'bg-emerald-500 border-emerald-500 text-white shadow-sm scale-100'
+            : status === 'failed'
+              ? 'bg-rose-500 border-rose-500 text-white shadow-sm scale-100'
+              : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600 text-transparent hover:scale-105'
           } ${isToday ? 'ring-2 ring-blue-100 dark:ring-blue-900 ring-offset-2 dark:ring-offset-gray-800' : ''}`}
-        title={status === 'none' ? 'Click to set status' : 'Click to clear'}
+        title={isFuture ? 'Future date' : status === 'none' ? 'Click to set status' : 'Click to clear'}
       >
         {status === 'completed' && (
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -250,6 +256,7 @@ export const HabitGrid: React.FC<HabitGridProps> = ({
                   const dateStr = formatDate(year, month, day);
                   const status = getHabitStatus(habit.id, dateStr, completions);
                   const isToday = day === currentDay;
+                  const isFuture = isCurrentMonth && currentDay !== null && day > currentDay;
                   const isActive = activePopup?.habitId === habit.id && activePopup?.date === dateStr;
 
                   return (
@@ -260,6 +267,7 @@ export const HabitGrid: React.FC<HabitGridProps> = ({
                       day={day}
                       status={status}
                       isToday={isToday}
+                      isFuture={isFuture}
                       isActive={isActive}
                       onCellClick={handleCellClick}
                       onPopupAction={handlePopupAction}
@@ -305,6 +313,7 @@ export const HabitGrid: React.FC<HabitGridProps> = ({
                 const dateStr = formatDate(year, month, day);
                 const status = getHabitStatus(habit.id, dateStr, completions);
                 const isToday = day === currentDay;
+                const isFuture = isCurrentMonth && currentDay !== null && day > currentDay;
                 const isActive = activePopup?.habitId === habit.id && activePopup?.date === dateStr;
 
                 return (
@@ -315,6 +324,7 @@ export const HabitGrid: React.FC<HabitGridProps> = ({
                     day={day}
                     status={status}
                     isToday={isToday}
+                    isFuture={isFuture}
                     isActive={isActive}
                     onCellClick={handleCellClick}
                     onPopupAction={handlePopupAction}

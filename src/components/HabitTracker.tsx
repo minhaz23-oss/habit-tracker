@@ -6,6 +6,7 @@ import { HabitGrid } from './HabitGrid';
 import { AddHabitForm } from './AddHabitForm';
 import { Statistics } from './Statistics';
 import { ProgressChart } from './ProgressChart';
+import { MotivationalQuote } from './MotivationalQuote';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 
@@ -218,7 +219,7 @@ export const HabitTracker: React.FC = () => {
 
       <div className="max-w-5xl mx-auto space-y-12 relative z-10 px-4 md:px-6">
         {/* Header */}
-        <div ref={headerRef} className="relative text-center space-y-4 py-6 px-4 md:py-8 md:px-6 rounded-3xl bg-white/30 dark:bg-black/30 backdrop-blur-md border border-white/20 shadow-xl">
+        <div ref={headerRef} className="relative text-center space-y-4 py-4 px-4 md:py-8 md:px-6 rounded-3xl bg-white/30 dark:bg-black/30 backdrop-blur-md border border-white/20 shadow-xl">
           <div className="absolute right-4 top-4 md:right-6 md:top-8 z-10">
             <button
               ref={darkModeBtnRef}
@@ -237,12 +238,17 @@ export const HabitTracker: React.FC = () => {
               )}
             </button>
           </div>
-          <h1 className="text-3xl md:text-5xl font-heading font-bold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent pb-2 drop-shadow-sm">
+          <h1 className="text-3xl md:text-5xl font-heading font-bold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent pb-2 drop-shadow-sm leading-none">
             Habit Tracker
           </h1>
           <p className="text-base md:text-lg font-sans text-gray-600 dark:text-gray-300 max-w-2xl mx-auto font-medium">
             Build consistency and track your progress with a simple, focused interface.
           </p>
+        </div>
+
+        {/* Motivational Quote */}
+        <div className="animate-entry">
+          <MotivationalQuote />
         </div>
 
         {/* Month Navigation */}
@@ -285,43 +291,14 @@ export const HabitTracker: React.FC = () => {
           )}
         </div>
 
-        {/* Statistics */}
-        {habitData.habits.length > 0 && (
-          <div className="animate-entry">
-            {/* Mobile: Collapsible with toggle button */}
-            <div className="md:hidden">
-              <button
-                onClick={() => setShowStats(!showStats)}
-                className="w-full mb-4 px-4 py-2 bg-white/40 dark:bg-gray-800/40 backdrop-blur-md rounded-xl border border-white/20 dark:border-gray-700/30 shadow-lg text-gray-900 dark:text-white font-medium flex items-center justify-between transition-all hover:bg-white/50 dark:hover:bg-gray-800/50"
-              >
-                <span className="font-heading">Statistics</span>
-                <svg
-                  className={`w-5 h-5 transition-transform ${showStats ? 'rotate-180' : ''}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              {showStats && <Statistics stats={stats} />}
-            </div>
-            {/* Desktop: Always visible */}
-            <div className="hidden md:block">
-              <Statistics stats={stats} />
-            </div>
-          </div>
-        )}
 
-        {/* Add Habit Form */}
-        <div className="animate-entry">
+
+        {/* Add Habit & Search Section */}
+        <div className={`grid gap-4 mb-8 animate-entry ${habitData.habits.length > 0 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 max-w-2xl mx-auto'}`}>
           <AddHabitForm onAddHabit={handleAddHabit} />
-        </div>
 
-        {/* Search Bar - Only show if there are habits */}
-        {habitData.habits.length > 0 && (
-          <div className="animate-entry">
-            <div className="relative max-w-md mx-auto">
+          {habitData.habits.length > 0 && (
+            <div className="relative w-full">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
                 <svg className="h-5 w-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -332,7 +309,7 @@ export const HabitTracker: React.FC = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search habits..."
-                className="block w-full pl-11 pr-4 py-3 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-white/20 dark:border-gray-700/30 rounded-2xl text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-500/50 dark:focus:ring-blue-400/50 focus:border-transparent text-sm shadow-lg transition-all font-sans"
+                className="block w-full pl-11 pr-4 py-3 md:py-4 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-white/20 dark:border-gray-700/30 rounded-2xl text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-500/50 dark:focus:ring-blue-400/50 focus:border-transparent text-sm md:text-base shadow-lg transition-all font-sans"
               />
               {searchQuery && (
                 <button
@@ -345,6 +322,27 @@ export const HabitTracker: React.FC = () => {
                 </button>
               )}
             </div>
+          )}
+        </div>
+
+        {/* Collapsible Statistics */}
+        {habitData.habits.length > 0 && (
+          <div className="animate-entry">
+            <button
+              onClick={() => setShowStats(!showStats)}
+              className="w-full mb-4 px-4 py-2 bg-white/40 dark:bg-gray-800/40 backdrop-blur-md rounded-xl border border-white/20 dark:border-gray-700/30 shadow-lg text-gray-900 dark:text-white font-medium flex items-center justify-between transition-all hover:bg-white/50 dark:hover:bg-gray-800/50"
+            >
+              <span className="font-heading">📊 Statistics</span>
+              <svg
+                className={`w-5 h-5 transition-transform ${showStats ? 'rotate-180' : ''}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            {showStats && <Statistics stats={stats} />}
           </div>
         )}
 
